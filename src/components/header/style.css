@@ -1,0 +1,12 @@
+.nav-item {
+  position: relative;
+}
+.nav-item .card {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  width: 5px;
+  text-align: center;
+  /* line-height: 20; */
+}
