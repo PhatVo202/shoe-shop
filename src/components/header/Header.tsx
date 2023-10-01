@@ -2,13 +2,18 @@ import React, { useEffect, useState } from 'react';
 import "./style.css"
 import { Button, Input } from 'antd';
 import Search from 'antd/es/input/Search';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchKeyProductAction } from '../../store/reducer/productReducer';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { RootDispatch, RootState } from '../../store/config';
+import { useNavigate } from 'react-router-dom';
+import { removeUseInfo } from '../../store/reducer/userReducer';
 export const Header = (): JSX.Element => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<RootDispatch>();
+    const userInfo = useSelector((state: RootState) => state.userReducer.userInfo);
+    const navigate = useNavigate();
     const [pinCode, setPinCode] = useState("")
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,6 +26,10 @@ export const Header = (): JSX.Element => {
         }, 500);
         return () => clearTimeout(getData)
     }, [pinCode])
+
+    const handleRemoveUserInfo = () => {
+        dispatch(removeUseInfo(""))
+    }
     return (
         <div className="container-lg">
             <nav className="navbar navbar-expand-sm navbar-light bg-light ">
@@ -62,7 +71,10 @@ export const Header = (): JSX.Element => {
                             /> */}
                         </li>
                         <li className="nav-item ml-2">
-                            <Button block>Đăng nhập</Button>
+                            {userInfo.email ? <div>
+                                <p>Hello!{userInfo.email}</p>
+                                <Button block onClick={() => handleRemoveUserInfo()}>Dang xuat</Button>
+                            </div> : <Button block onClick={() => navigate("/login")}>Đăng nhập</Button >}
                         </li>
                     </ul>
                 </div>

@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootDispatch, RootState } from './store/config';
 import { HomeLayout } from './layouts/home/HomeLayout';
 import { fetchProductAction } from './store/reducer/productReducer';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Login } from './pages/login/Login';
 
 function App() {
   const dispatch = useDispatch<RootDispatch>();
@@ -17,9 +19,12 @@ function App() {
   // console.log(products.content)
 
   return (
-    <div className="App">
-      <HomeLayout />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<HomeLayout />} />
+        <Route path='/login' element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
