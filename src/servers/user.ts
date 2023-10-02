@@ -51,10 +51,22 @@ export const registerApi = (data:Register):AxiosPromise<HttpResponse<Register[]>
     })
 }
 
+//Profile 
 export const fetchProfileApi = (accessToken:string):AxiosPromise<HttpResponse<Profile[]>>=>{
     return axios({
         url:"https://shop.cyberlearn.vn/api/Users/getProfile",
         method:"POST",
+        headers:{
+            "Authorization": `Bearer ${accessToken}`
+        }
+    })
+}
+
+//Like product
+export const getLikeProducts = (producId:number,accessToken:string)=>{
+    return axios({
+        url:`https://shop.cyberlearn.vn/api/Users/like?productId=${producId}}`,
+        method:"GET",
         headers:{
             "Authorization": `Bearer ${accessToken}`
         }
