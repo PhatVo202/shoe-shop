@@ -1,5 +1,5 @@
 import { Action, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Profile, fetchProfileApi } from '../../servers/user';
+import { Profile, Register, fetchProfileApi, registerApi } from '../../servers/user';
 
 
 
@@ -8,7 +8,8 @@ interface UserInfo{
     email:string,
     accessToken:string
   },
-  profile:Profile[]
+  profile:Profile[],
+  userRegister:Register[]
 } 
 
 const initialState:UserInfo = {
@@ -16,7 +17,8 @@ const initialState:UserInfo = {
       email: "",
       accessToken:""
     },
-    profile:[]
+    profile:[],
+    userRegister:[]
 }
 
 const userReducer = createSlice({
@@ -27,6 +29,11 @@ const userReducer = createSlice({
     getUserInfo:(state,action)=>{
       state.userInfo = action.payload
     },
+
+    getRegisterUser:(state,action)=>{
+      state.userRegister = action.payload
+    },
+
     removeUseInfo:(state,action)=>{
        state.userInfo.accessToken  = ""
        state.userInfo.email =""
@@ -41,7 +48,7 @@ const userReducer = createSlice({
 });
 
 
-export const {getUserInfo,removeUseInfo} = userReducer.actions
+export const {getRegisterUser,getUserInfo,removeUseInfo} = userReducer.actions
 
 export default userReducer.reducer
 

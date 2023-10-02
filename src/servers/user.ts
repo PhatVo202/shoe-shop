@@ -24,6 +24,14 @@ export interface Profile {
     ordersHistory:[]
 }
 
+export interface Register{
+    email:string,
+    password:string,
+    name:string,
+    gender:boolean,
+    phone:string
+}
+
 
 //dang nhap
 export const signInApi = (data:SignIn):AxiosPromise<HttpResponse<Users[]>>=>{
@@ -31,6 +39,15 @@ export const signInApi = (data:SignIn):AxiosPromise<HttpResponse<Users[]>>=>{
         url:"https://shop.cyberlearn.vn/api/Users/signin",
         method:"POST",
         data:data,
+    })
+}
+
+//dang ky
+export const registerApi = (data:Register):AxiosPromise<HttpResponse<Register[]>>=>{
+    return axios({
+        url:"https://shop.cyberlearn.vn/api/Users/signup",
+        method:"POST",
+        data:data
     })
 }
 

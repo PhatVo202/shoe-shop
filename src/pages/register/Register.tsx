@@ -1,34 +1,32 @@
-import React, { useEffect } from 'react'
-import { Header } from '../../components/header/Header'
+import React, { useState } from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, } from 'antd';
-import { signInApi } from '../../servers/user';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootDispatch, RootState } from '../../store/config';
-import { fetchProfileAction, getUserInfo } from '../../store/reducer/userReducer';
-import { Link } from 'react-router-dom';
+import { Button, Checkbox, Form, Input } from 'antd';
+import { Header } from '../../components/header/Header';
+import type { RadioChangeEvent } from 'antd';
+import { Radio } from 'antd';
+import { registerApi } from '../../servers/user';
+import { useDispatch } from 'react-redux';
+import { RootDispatch } from '../../store/config';
+import { getRegisterUser } from '../../store/reducer/userReducer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
-
-
-export const Login: React.FC = () => {
+export const Register: React.FC = () => {
     const dispatch = useDispatch<RootDispatch>();
-    const userInfo = useSelector((state: RootState) => state.userReducer.userInfo);
-
-    useEffect(() => {
-        dispatch(fetchProfileAction(userInfo.accessToken))
-    }, [userInfo.accessToken])
-
+    const navigate = useNavigate();
     const onFinish = async (values: any) => {
         const data = {
             email: values.email,
             password: values.password,
+            name: values.name,
+            gender: gender,
+            phone: values.phone
         };
         try {
-            const result = await signInApi(data);
-            dispatch(getUserInfo(result.data.content));
-            toast.success('Logged in successfully👌!!', {
+            const result = await registerApi(data)
+            dispatch(getRegisterUser(result.data.content))
+            toast.success('Register success👌!!', {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -38,8 +36,8 @@ export const Login: React.FC = () => {
                 progress: undefined,
                 theme: "light",
             });
+            navigate("/login")
         } catch (error: any) {
-            console.log(error.response.data)
             toast.error(`${error.response.data.message} 🤯`, {
                 position: "top-right",
                 autoClose: 2000,
@@ -51,12 +49,17 @@ export const Login: React.FC = () => {
                 theme: "light",
             })
         }
+    }
+    const [gender, setGender] = useState(true);
+
+    const onChange = (e: RadioChangeEvent) => {
+        setGender(e.target.value);
     };
 
     return (
         <>
+            <Header />
             <div className='container-lg'>
-                <Header />
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}>
                     <Form
                         name="normal_login"
@@ -68,30 +71,54 @@ export const Login: React.FC = () => {
                             name="email"
                             rules={[{ required: true, message: 'Please input your Username!' }]}
                         >
-                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                            <Input
+                                size='large'
+                                prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
                         </Form.Item>
                         <Form.Item
                             name="password"
                             rules={[{ required: true, message: 'Please input your Password!' }]}
                         >
                             <Input
+                                size='large'
                                 prefix={<LockOutlined className="site-form-item-icon" />}
                                 type="password"
                                 placeholder="Password"
                             />
                         </Form.Item>
+                        <Form.Item
+                            name="name"
+                            rules={[{ required: true, message: 'Please input your Username!' }]}
+                        >
+                            <Input
+                                size='large'
+                                prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
+                        </Form.Item>
+                        <Form.Item>
+                            <Radio.Group onChange={onChange} value={gender}>
+                                <Radio value={true}>Male</Radio>
+                                <Radio value={false}>Female</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Form.Item
+                            name="phone"
+                            rules={[{ required: true, message: 'Please input your Username!' }]}
+                        >
+                            <Input
+                                size='large'
+                                prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Phone" />
+                        </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="login-form-button">
-                                Log in
+                                Submit
                             </Button>
-                            Or <Link to={"/register"}>register now!</Link>
                         </Form.Item>
                     </Form>
                 </div>
                 <ToastContainer />
+
             </div>
-
-
         </>
+
     )
 }

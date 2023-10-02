@@ -7,6 +7,7 @@ import { HomeLayout } from './layouts/home/HomeLayout';
 import { fetchProductAction } from './store/reducer/productReducer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Login } from './pages/login/Login';
+import { Register } from './pages/register/Register';
 
 function App() {
   const dispatch = useDispatch<RootDispatch>();
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route path='/' element={<HomeLayout />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
